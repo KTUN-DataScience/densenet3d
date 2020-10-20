@@ -1,2 +1,3 @@
 # Ignore VSCODE settings. 
 *.vscode
+__pycache__
