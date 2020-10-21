@@ -8,6 +8,7 @@ from utils.get_data import *
 from utils.train_utils import *
 from utils.spatial_transforms import *
 from utils.temporal_transforms import *
+from utils.train import train_epoch
 from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
@@ -76,3 +77,20 @@ if __name__ == "__main__":
 
     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', 
         patience=Config.lr_patience)
+
+    best_prec1 = 0
+    for i in range(Config.begin_epoch, Config.n_epochs + 1):
+
+        adjust_learning_rate(optimizer, i)
+        
+        train_epoch(i, train_loader, model, criterion, optimizer,
+                        train_logger, train_batch_logger)
+        state = {
+            'epoch': i,
+            'arch': Config.arch,
+            'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'best_prec1': best_prec1
+            }
+        save_checkpoint(state, False, store_name)
+        

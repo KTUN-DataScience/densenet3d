@@ -7,7 +7,7 @@ class Config:
         from config import Config
         Config.learning_rate
     """
-    
+    arch = 'Densenet'
     # Set learning rate of model.
     learning_rate = 0.01
     lr_patience = 10

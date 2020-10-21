@@ -1,3 +1,7 @@
 # Ignore VSCODE settings. 
 *.vscode
 __pycache__
+
+#Ignore dataset
+
+dataset/jester/*
