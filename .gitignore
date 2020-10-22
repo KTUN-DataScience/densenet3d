@@ -5,3 +5,6 @@ __pycache__
 #Ignore dataset
 
 dataset/jester/*
+
+# Ignore results
+*.log

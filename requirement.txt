@@ -1,7 +1,7 @@
-certifi==2020.6.20
-olefile==0.46
-scipy==1.5.3
-six==1.15.0
-torch==1.6.0
-torchvision==0.7.0
-wincertstore==0.2
+future==0.18.2
+numpy==1.19.1
+opencv-python==4.4.0.44
+Pillow==7.2.0
+scipy==1.5.2
+torch==1.6.0+cu101
+torchvision==0.7.0+cu101

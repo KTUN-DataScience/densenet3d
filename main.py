@@ -13,7 +13,9 @@ from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
 if __name__ == "__main__":
-    torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    print(torch.cuda.is_available())
+    device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+    print(f'Graphic Cart Used for the experiment: {device}')
 
     model = init_model(densenet)
 
@@ -28,7 +30,11 @@ if __name__ == "__main__":
 
     norm_method = Normalize(mean, std)
 
-    crop_method = MultiScaleCornerCrop(Config.scales, Config.sample_size)
+    scales = [Config.initial_scale]
+    for i in range(1, Config.n_scales):
+        scales.append(scales[-1] * Config.scale_step)
+
+    crop_method = MultiScaleCornerCrop(scales, Config.sample_size)
 
     spatial_transform = Compose([
         RandomHorizontalFlip(),
@@ -68,7 +74,7 @@ if __name__ == "__main__":
         dampening = Config.dampening
 
     optimizer = optim.SGD(
-        model.paramters(),
+        model.parameters(),
         lr=Config.learning_rate,
         momentum=Config.momentum,
         dampening=dampening,

@@ -12,7 +12,7 @@ def set_criterion():
     TODO: allow use of different criterion
     """
     criterion = nn.CrossEntropyLoss()
-    return criterion.cuda() if torch.cuda.is_available() else criterion
+    return criterion.cuda()
 
 def init_model(model):
     """Set model training devices. 
