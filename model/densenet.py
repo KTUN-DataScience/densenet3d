@@ -158,7 +158,7 @@ class DenseNet(nn.Module):
         return out
 
 
-def getModel():
+def getModel(**kwargs):
     return DenseNet(num_init_features=64,
                          growth_rate=32,
-                         block_config=(6, 12, 24, 16))
+                         block_config=(6, 12, 24, 16), **kwargs)

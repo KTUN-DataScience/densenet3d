@@ -21,7 +21,9 @@ def init_model(model):
     Returns:
         return pytorch model
     """
-    model = model.getModel().cuda()
+    model = model.getModel(
+        num_classes=Config.n_classes
+    ).cuda()
     model = nn.DataParallel(model, device_ids=None)
     params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     return model

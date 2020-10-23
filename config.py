@@ -28,7 +28,7 @@ class Config:
         dataset_path:
         annotation_path:
         result_path:
-        number_of_classes:
+        n_classes:
         initial_scale:
         n_scales:
         scale_step:
@@ -52,7 +52,9 @@ class Config:
     begin_epoch = 1
 
     n_epochs = 2
-    
+
+    n_classes = 5
+
     lr_steps = [40, 55, 65, 70, 200, 250]
     weight_decay = 1e-3
     nesterov = True
@@ -72,7 +74,6 @@ class Config:
     dataset_path = 'E:\densenet3d\dataset\jester'
     annotation_path = 'E:\\densenet3d\\dataset\\annotation\\jester.json'
     result_path = 'E:\\densenet3d\\results'
-    number_of_classes: 27
     initial_scale = 1
     n_scales = 5
     scale_step = 0.84089641525
@@ -83,3 +84,34 @@ class Config:
     train_crop = ''
     mean_norm = False,
     std_norm = False
+    labels_to_use = {
+        'labels': [
+            # "Doing_other_things",
+            # "Drumming_Fingers",
+            # "No_gesture",
+            # "Pulling_Hand_In",
+            # "Pulling_Two_Fingers_In",
+            "Pushing_Hand_Away",
+            "Pushing_Two_Fingers_Away",
+            "Rolling_Hand_Backward",
+            "Rolling_Hand_Forward",
+            "Shaking_Hand",
+            # "Sliding_Two_Fingers_Down",
+            # "Sliding_Two_Fingers_Left",
+            # "Sliding_Two_Fingers_Right",
+            # "Sliding_Two_Fingers_Up",
+            # "Stop_Sign",
+            # "Swiping_Down",
+            # "Swiping_Left",
+            # "Swiping_Right",
+            # "Swiping_Up",
+            # "Thumb_Down",
+            # "Thumb_Up",
+            # "Turning_Hand_Clockwise",
+            # "Turning_Hand_Counterclockwise",
+            # "Zooming_In_With_Full_Hand",
+            # "Zooming_In_With_Two_Fingers",
+            # "Zooming_Out_With_Full_Hand",
+            # "Zooming_Out_With_Two_Fingers"
+        ]
+    }
