@@ -4,7 +4,6 @@
 Densenet3D implementation using PyTorch
 
 ## Getting started
----
 
 ### Requirements
 - [python 3.6 >=][pythorn] 
@@ -25,7 +24,7 @@ password: jesterdataset
 
 After you log in chose the following dataset and download to a folder. 
 
-[dataset]: https://github.com/KTUN-DataScience/densenet3d/raw/main/docs/images/dataset.jpg
+![Download Dialogue](https://raw.githubusercontent.com/KTUN-DataScience/densenet3d/main/docs/images/dataset.jpg "Download dialogue")
 
 After download extract:
 ```console
