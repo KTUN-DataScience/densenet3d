@@ -5,7 +5,7 @@ Densenet3D implementation using PyTorch
 
 ## Getting started
 
-### Requirements
+### 1. Requirements
 - [python 3.6 >=][pythorn] 
 - CUDA [10.1][cuda10.1] or [10.2][cuda10.2]
 - [pytorch 1.6.0][pytorch]
@@ -13,7 +13,7 @@ Densenet3D implementation using PyTorch
 - scipy
 - Numpy
 
-### Dataset
+### 2. Dataset
 Download 20BN-Jester Dataset from [here](https://20bn.com/datasets/download)
 
 Use the following credentials to login if you do not want to create your own.
@@ -34,25 +34,26 @@ cat 20bn-jester-v1-??|gzip -dc|tar xf -
 ```
 For the second command use a unix terminal like git bash. After extraction add the folder to the project or place the folder in  place you can easily access.
 
-###  Install Dependencies
+### 3. Install Dependencies
 
 Install dependencies using requirement.txt with the following command. 
 ```console
 pip install -r requirements.txt
 ```
-### Create frames
+### 4. Create frames
 
 ```console
-python utils/n_frames_jester.py dataset folder
+python utils/n_frames_jester.py dataset_folder
 ```
 
-### Configuration 
+### 5. Configuration 
 `config.py` contains all the parameters to train **Densenet3D** model
 | Attribute        | Default           | Description  |
 | ------------- |:-------------:| :-----|
 | `arch`     | Densenet | Name of the architecture of the model |
 | `learning_rate`      | 0.01      | Set learning rate for the model |
-
+#### Note: *This table will be update later*
+ 
 **Example**:
 ```python
 class Config:
@@ -80,7 +81,7 @@ class Config:
     ...
 ``` 
 
-### Run
+### 6. Run
 ```console
 python main.py
 ```
