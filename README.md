@@ -13,6 +13,14 @@ Densenet3D implementation using PyTorch
 - scipy
 - Numpy
 
+### 2. Copy configuration
+```console
+ cp config.py.example config.py
+```
+For windows
+```console
+ copy config.py.example config.py
+```
 ### 2. Dataset
 Download 20BN-Jester Dataset from [here](https://20bn.com/datasets/download)
 
