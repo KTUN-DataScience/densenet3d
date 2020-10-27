@@ -8,3 +8,6 @@ dataset/jester/*
 
 # Ignore results
 *.log
+
+# Ignore config
+config.py

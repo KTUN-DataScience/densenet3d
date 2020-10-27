@@ -71,9 +71,9 @@ class Config:
     downsample = 1
     optimiser = 'SDG'
     cuda = True
-    dataset_path = 'E:\densenet3d\dataset\jester'
-    annotation_path = 'E:\\densenet3d\\dataset\\annotation\\jester.json'
-    result_path = 'E:\\densenet3d\\results'
+    dataset_path = 'dataset/jester'
+    annotation_path = 'dataset/annotation/jester.json'
+    result_path = '\\results'
     initial_scale = 1
     n_scales = 5
     scale_step = 0.84089641525
