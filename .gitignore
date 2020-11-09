@@ -9,5 +9,5 @@ dataset/jester/*
 # Ignore results
 *.log
 
-# Ignore config
-config.py
+# Trained model checkpoints
+*.pth

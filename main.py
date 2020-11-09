@@ -13,8 +13,10 @@ from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
 if __name__ == "__main__":
+
     print(torch.cuda.is_available())
     device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+    
     print(f'Graphic Cart Used for the experiment: {device}')
 
     model = init_model(densenet)
