@@ -3,16 +3,42 @@ from torch import nn
 import csv
 import shutil
 import numpy as np
+from utils.spatial_transforms import Normalize, MultiScaleCornerCrop, MultiScaleRandomCrop
 from config import Config
 
 def set_criterion():
     """Set criterion
-    Description:
+
+        Description:
         - Set criterion based on whether cuda is available or not. 
-    TODO: allow use of different criterion
+    # TODO: allow use of different criterion
     """
     criterion = nn.CrossEntropyLoss()
     return criterion.cuda()
+
+def set_norm_method(mean, std):
+    """
+    Set normalization method based on mean and std
+
+    Parameters:
+    ------------
+    mean : float 
+        Mean value for dataset
+    std : float 
+        Standard deviation for dataset
+    
+    Returns
+    ---------        
+    Normalize
+        Normalise class
+
+    """
+    if Config.mean_norm and not Config.std_norm:
+        return Normalize([0, 0, 0], [1, 1, 1])
+    elif not Config.std_norm:
+        return Normalize(mean, [1, 1, 1])
+    else: 
+        return Normalize(mean, std)
 
 def init_model(model):
     """Set model training devices. 
@@ -27,6 +53,29 @@ def init_model(model):
     model = nn.DataParallel(model, device_ids=None)
     params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     return model
+
+def set_crop_method(scales):
+    """
+    Set cropping method to be applied on the dataset in memory
+
+    Args:
+    -----
+    scales : list 
+        list of scaling ratios
+
+    Returns:
+    ---------
+    Spatial Transformation
+
+    """
+    assert Config.train_crop in ['random','corner', 'center']
+    crop = Config.train_crop
+    if crop == 'random':
+        return MultiScaleRandomCrop(scales, Config.sample_size)
+    elif crop == 'corner':
+        return MultiScaleCornerCrop(scales, Config.sample_size)
+    elif crop == 'center':
+        return MultiScaleCornerCrop(scales, Config.sample_size, crop_positions=['c'])
 
 
 def get_mean(norm_value=255, dataset='activitynet'):

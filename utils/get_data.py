@@ -23,7 +23,7 @@ def get_validation_set(spatial_transform, temporal_transform,
             spatial_transform,
             temporal_transform,
             target_transform,
-            sample_duration=opt.sample_duration)
+            sample_duration=Config.sample_duration)
 
 def get_test_set(opt, spatial_transform, temporal_transform, target_transform):
     return Jester(

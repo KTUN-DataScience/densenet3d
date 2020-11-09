@@ -56,10 +56,21 @@ class Config:
     n_classes = 5
 
     lr_steps = [40, 55, 65, 70, 200, 250]
+
     weight_decay = 1e-3
+
     nesterov = True
+
     dataset = 'jester'
+
     model = 'densenet3d'
+    
+    train = True
+
+    validation = True
+
+    test = True
+
     width_mult = 1.0
     batch_size = 16
     n_threads = 4
@@ -74,6 +85,7 @@ class Config:
     dataset_path = 'dataset/jester'
     annotation_path = 'dataset/annotation/jester.json'
     result_path = '\\results'
+    resume_path = ''
     initial_scale = 1
     n_scales = 5
     scale_step = 0.84089641525
@@ -81,9 +93,12 @@ class Config:
     mean_dataset = 'kinetics'
     dataset = ''
     store_name = ''
-    train_crop = ''
+    train_crop = 'random'
     mean_norm = False,
-    std_norm = False
+    std_norm = False,
+    softmax_in_test = True,
+    scale_in_test = 1.0,
+    test_subset = 'val'
     labels_to_use = {
         'labels': [
             # "Doing_other_things",
