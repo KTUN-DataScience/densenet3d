@@ -121,11 +121,13 @@ class Config:
 
     std_norm = False,
 
-    softmax_in_test = True,
+    softmax_in_test = True
 
-    scale_in_test = 1.0,
+    scale_in_test = 1.0
 
     test_subset = 'val'
+
+    crop_position_in_test = 'c'
     
     labels_to_use = {
         'labels': [

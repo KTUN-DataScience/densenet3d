@@ -11,3 +11,10 @@ dataset/jester/*
 
 # Trained model checkpoints
 *.pth
+
+#ignore config.py
+config.py
+
+#ignore results
+results/*
+

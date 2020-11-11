@@ -119,7 +119,7 @@ if __name__ == "__main__":
         checkpoint = torch.load(Config.resume_path)
         assert Config.arch == checkpoint['arch']
         best_prec1 = checkpoint['best_prec1']
-        opt.begin_epoch = checkpoint['epoch']
+        Config.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
     
     for i in range(Config.begin_epoch, Config.n_epochs + 1):
@@ -162,15 +162,13 @@ if __name__ == "__main__":
         temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
         target_transform = VideoID()
 
-        test_data = get_test_set(spatial_transform, temporal_transform,
-                                 target_transform)
+        test_data = get_test_set(spatial_transform, temporal_transform, target_transform)
         test_loader = torch.utils.data.DataLoader(
             test_data,
             batch_size=Config.batch_size,
             shuffle=False,
             num_workers=Config.n_threads,
             pin_memory=True)
-            
         test(test_loader, model, test_data.class_names)
         
     
