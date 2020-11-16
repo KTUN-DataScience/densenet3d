@@ -7,6 +7,12 @@ import os
 import sys
 from config import Config
 from utils.train_utils import *
+from utils.spatial_transforms import *
+from utils.temporal_transforms import *
+from utils.target_transforms import ClassLabel, VideoID
+from utils.target_transforms import Compose as TargetCompose
+from utils.get_data import get_test_set, get_validation_set
+
 
 
 def train_epoch(epoch, data_loader, model, criterion, optimizer,
@@ -207,3 +213,94 @@ def test(data_loader, model, class_names):
             os.path.join(Config.result_path, '{}.json'.format(Config.test_subset)),
             'w') as f:
         json.dump(test_results, f)
+
+def evaluate_model(model):
+    torch.manual_seed(Config.seed)
+    model = init_model(model)
+    mean = get_mean(Config.norm_value, dataset = Config.mean_dataset)
+    std = get_std(Config.norm_value)
+    norm_method = set_norm_method(mean, std)
+
+    spatial_transform = Compose([
+        Scale(int(Config.sample_size / Config.scale_in_test)),
+        CornerCrop(Config.sample_size, Config.crop_position_in_test),
+        ToTensor(Config.norm_value), norm_method
+    ])
+
+    temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
+    
+    target_transform = ClassLabel()
+
+    test_data = get_test_set(spatial_transform, temporal_transform, target_transform)
+    test_loader = torch.utils.data.DataLoader(
+            test_data,
+            batch_size=1,
+            shuffle=False,
+            num_workers=Config.n_threads,
+            pin_memory=True)
+
+    model.eval()
+
+    recorder = []
+
+    batch_time = AverageMeter()
+    top1 = AverageMeter()
+    top5 = AverageMeter()
+
+    start = time.time()
+
+    for i, (inputs, targets) in enumerate(test_loader):
+        if Config.cuda:
+            targets = targets.cuda(async=True)
+        #inputs = Variable(torch.squeeze(inputs), volatile=True)
+        inputs = Variable(inputs, volatile=True)
+        targets = Variable(targets, volatile=True)
+        outputs = model(inputs)
+
+        recorder.append(outputs.data.cpu().numpy().copy())
+        #outputs = torch.unsqueeze(torch.mean(outputs, 0), 0)
+        prec1, prec5 = calculate_accuracy(outputs, targets, topk=(1, 5))
+
+        top1.update(prec1, inputs.size(0))
+        top5.update(prec5, inputs.size(0))
+
+        batch_time.update(time.time() - start)
+        end_time = time.time()
+
+        print('[{0}/{1}]\t'
+            'Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
+            'prec@1 {top1.avg:.5f} prec@5 {top5.avg:.5f}'.format(
+                i + 1,
+                len(test_loader),
+                batch_time=batch_time,
+                top1=top1,
+                top5=top5))
+
+    video_pred = [np.argmax(np.mean(x, axis=0)) for x in recorder]
+    print(video_pred)
+
+    with open('dataset/annotation/categories.txt') as f:
+        lines = f.readlines()
+        categories = [item.rstrip() for item in lines]
+
+    name_list = [x.strip().split()[0] for x in open('dataset/annotation/vallist.txt')]
+
+    order_dict = {e:i for i, e in enumerate(sorted(name_list))}
+    reorder_output = [None] * len(recorder)
+    reorder_pred = [None] * len(recorder)
+    output_csv = []
+
+    # for i in range(len(recorder)):
+    #     idx = order_dict[name_list[i]]
+    #     reorder_output[idx] = recorder[i]
+    #     reorder_pred[idx] = video_pred[i]
+    #     output_csv.append('%s;%s'%(name_list[i],
+    #                             categories[video_pred[i]]))
+
+    #     with open(Config.result_path +'/'+Config.dataset + '_predictions.csv','w') as f:
+    #         f.write('\n'.join(output_csv))
+ 
+    print('-----Evaluation is finished------')
+    print('Overall Prec@1 {:.05f}% Prec@5 {:.05f}%'.format(top1.avg, top5.avg))
+    
+

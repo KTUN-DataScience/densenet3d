@@ -35,7 +35,7 @@ def get_test_set(spatial_transform, temporal_transform, target_transform):
             Config.dataset_path,
             Config.annotation_path,
             subset,
-            0,
+            Config.n_val_samples,
             spatial_transform,
             temporal_transform,
             target_transform,

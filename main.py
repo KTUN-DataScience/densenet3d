@@ -1,5 +1,6 @@
 import os 
 import torch
+from datetime import datetime
 from torch import optim
 from torch.optim import lr_scheduler
 from config import Config
@@ -8,11 +9,13 @@ from utils.get_data import *
 from utils.train_utils import *
 from utils.spatial_transforms import *
 from utils.temporal_transforms import *
-from utils.train import train_epoch, val_epoch, test
+from utils.train import train_epoch, val_epoch, test, evaluate_model
 from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
 if __name__ == "__main__":
+    # start time
+    start =  datetime.now()
 
     print(torch.cuda.is_available())
 
@@ -153,22 +156,28 @@ if __name__ == "__main__":
             save_checkpoint(state, is_best, store_name)
     
     if Config.test:
-        spatial_transform = Compose([
-            Scale(int(Config.sample_size / Config.scale_in_test)),
-            CornerCrop(Config.sample_size, Config.crop_position_in_test),
-            ToTensor(Config.norm_value), norm_method
-        ])
-        # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-        temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
-        target_transform = VideoID()
 
-        test_data = get_test_set(spatial_transform, temporal_transform, target_transform)
-        test_loader = torch.utils.data.DataLoader(
-            test_data,
-            batch_size=Config.batch_size,
-            shuffle=False,
-            num_workers=Config.n_threads,
-            pin_memory=True)
-        test(test_loader, model, test_data.class_names)
+        evaluate_model(densenet)
+
+    #     spatial_transform = Compose([
+    #         Scale(int(Config.sample_size / Config.scale_in_test)),
+    #         CornerCrop(Config.sample_size, Config.crop_position_in_test),
+    #         ToTensor(Config.norm_value), norm_method
+    #     ])
+    #     # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+    #     temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
+    #     target_transform = VideoID()
+
+    #     test_data = get_test_set(spatial_transform, temporal_transform, target_transform)
+    #     test_loader = torch.utils.data.DataLoader(
+    #         test_data,
+    #         batch_size=Config.batch_size,
+    #         shuffle=False,
+    #         num_workers=Config.n_threads,
+    #         pin_memory=True)
+    #     test(test_loader, model, test_data.class_names)
+
+    # time_elapsed = datetime.now() - start 
+    print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))
         
     
