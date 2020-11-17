@@ -238,7 +238,6 @@ def evaluate_model(model):
             shuffle=False,
             num_workers=Config.n_threads,
             pin_memory=True)
-
     model.eval()
 
     recorder = []
@@ -290,15 +289,15 @@ def evaluate_model(model):
     reorder_pred = [None] * len(recorder)
     output_csv = []
 
-    # for i in range(len(recorder)):
-    #     idx = order_dict[name_list[i]]
-    #     reorder_output[idx] = recorder[i]
-    #     reorder_pred[idx] = video_pred[i]
-    #     output_csv.append('%s;%s'%(name_list[i],
-    #                             categories[video_pred[i]]))
+    for i in range(len(recorder)):
+        idx = order_dict[name_list[i]]
+        reorder_output[idx] = recorder[i]
+        reorder_pred[idx] = video_pred[i]
+        output_csv.append('%s;%s'%(name_list[i],
+                                categories[video_pred[i]]))
 
-    #     with open(Config.result_path +'/'+Config.dataset + '_predictions.csv','w') as f:
-    #         f.write('\n'.join(output_csv))
+        with open(Config.result_path +'/'+Config.dataset + '_predictions.csv','w') as f:
+            f.write('\n'.join(output_csv))
  
     print('-----Evaluation is finished------')
     print('Overall Prec@1 {:.05f}% Prec@5 {:.05f}%'.format(top1.avg, top5.avg))

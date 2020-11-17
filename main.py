@@ -59,6 +59,7 @@ if __name__ == "__main__":
         temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
         target_transform = ClassLabel()
         training_data = get_training_set(spatial_transform,temporal_transform,target_transform)
+        import pdb; pdb.set_trace()
 
         train_loader = torch.utils.data.DataLoader(
                 training_data,
@@ -177,7 +178,7 @@ if __name__ == "__main__":
     #         pin_memory=True)
     #     test(test_loader, model, test_data.class_names)
 
-    # time_elapsed = datetime.now() - start 
+    time_elapsed = datetime.now() - start 
     print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))
         
     
