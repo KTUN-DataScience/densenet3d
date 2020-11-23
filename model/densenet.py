@@ -4,14 +4,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from collections import OrderedDict
-
-
+from config import Config
 class _DenseLayer(nn.Sequential):
 
     def __init__(self, num_input_features, growth_rate, bn_size, drop_rate):
         super().__init__()
         self.add_module('norm1', nn.BatchNorm3d(num_input_features))
-        self.add_module('relu1', nn.ReLU(inplace=True))
+        self.add_module('relu1', set_activation())
         self.add_module(
             'conv1',
             nn.Conv3d(num_input_features,
@@ -20,7 +19,7 @@ class _DenseLayer(nn.Sequential):
                       stride=1,
                       bias=False))
         self.add_module('norm2', nn.BatchNorm3d(bn_size * growth_rate))
-        self.add_module('relu2', nn.ReLU(inplace=True))
+        self.add_module('relu2', set_activation())
         self.add_module(
             'conv2',
             nn.Conv3d(bn_size * growth_rate,
@@ -56,7 +55,7 @@ class _Transition(nn.Sequential):
     def __init__(self, num_input_features, num_output_features):
         super().__init__()
         self.add_module('norm', nn.BatchNorm3d(num_input_features))
-        self.add_module('relu', nn.ReLU(inplace=True))
+        self.add_module('relu', set_activation())
         self.add_module(
             'conv',
             nn.Conv3d(num_input_features,
@@ -102,7 +101,7 @@ class DenseNet(nn.Module):
                                     padding=(conv1_t_size // 2, 3, 3),
                                     bias=False)),
                          ('norm1', nn.BatchNorm3d(num_init_features)),
-                         ('relu1', nn.ReLU(inplace=True))]
+                         ('relu1', set_activation())]
         if not no_max_pool:
             self.features.append(
                 ('pool1', nn.MaxPool3d(kernel_size=3, stride=2, padding=1)))
@@ -141,7 +140,7 @@ class DenseNet(nn.Module):
             if isinstance(m, nn.Conv3d):
                 nn.init.kaiming_normal_(m.weight,
                                         mode='fan_out',
-                                        nonlinearity='relu')
+                                        nonlinearity=Config.activation)
             elif isinstance(m, nn.BatchNorm3d):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
@@ -150,7 +149,8 @@ class DenseNet(nn.Module):
 
     def forward(self, x):
         features = self.features(x)
-        out = F.relu(features, inplace=True)
+        activation_method = getattr(F, Config.activation)
+        out = activation_method(features, inplace=True)
         out = F.adaptive_avg_pool3d(out,
                                     output_size=(1, 1,
                                                  1)).view(features.size(0), -1)
@@ -162,3 +162,10 @@ def getModel(**kwargs):
     return DenseNet(num_init_features=64,
                          growth_rate=32,
                          block_config=(6, 12, 24, 16), **kwargs)
+
+def set_activation():
+    assert(Config.activation =='leaky_relu' or Config.activation == 'relu')
+    if Config.activation == 'leaky_relu':
+        return nn.LeakyReLU(Config.negative_slope, inplace=True)
+    elif Config.activation == 'relu':
+        return nn.ReLU(inplace=True)
