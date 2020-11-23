@@ -64,6 +64,10 @@ class Config:
     dataset = 'jester'
 
     model = 'densenet3d'
+
+    activation = 'leaky_relu'
+
+    negative_slope = 0.01
     
     train = True
 

@@ -52,6 +52,7 @@ def init_model(model):
     ).cuda()
     model = nn.DataParallel(model, device_ids=None)
     params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    
     return model
 
 def set_crop_method(scales):

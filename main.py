@@ -14,7 +14,9 @@ from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
 if __name__ == "__main__":
+
     # start time
+    import pdb; pdb.set_trace()
     start =  datetime.now()
 
     print(torch.cuda.is_available())
