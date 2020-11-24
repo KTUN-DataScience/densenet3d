@@ -167,5 +167,4 @@ def set_activation():
     assert(Config.activation =='leaky_relu' or Config.activation == 'relu')
     if Config.activation == 'leaky_relu':
         return nn.LeakyReLU(Config.negative_slope, inplace=True)
-    elif Config.activation == 'relu':
-        return nn.ReLU(inplace=True)
+    return nn.ReLU(inplace=True)

@@ -1,5 +1,5 @@
 import torch
-from torch import nn
+from torch import nn, optim
 import csv
 import shutil
 import numpy as np
@@ -77,6 +77,41 @@ def set_crop_method(scales):
         return MultiScaleCornerCrop(scales, Config.sample_size)
     elif crop == 'center':
         return MultiScaleCornerCrop(scales, Config.sample_size, crop_positions=['c'])
+
+def set_optimizer(model):
+    """
+    Set optimizer algorithm:
+
+    Args:
+    ----
+    model: torch.nn.Module
+        Instance of nn.Module
+    
+    Returns: 
+    --------
+    torch.optim.Optimizer
+    """
+    assert(Config.optimizer =='SGD' or Config.optimizer == 'Adam')
+
+    if Config.optimizer == 'SGD':
+        if Config.nesterov:
+            dampening = 0
+        else:
+            dampening = Config.dampening
+
+        return optim.SGD(model.parameters(), 
+            lr=Config.learning_rate, 
+            momentum=Config.momentum,
+            dampening=dampening,
+            weight_decay=Config.weight_decay,
+            nesterov=Config.nesterov)
+
+    return optim.Adam(model.parameters(), 
+        lr=Config.learning_rate, 
+        betas=Config.betas,
+        eps=Config.eps,
+        weight_decay=Config.weight_decay,
+        amsgrad=Config.amsgrad)
 
 
 def get_mean(norm_value=255, dataset='activitynet'):
