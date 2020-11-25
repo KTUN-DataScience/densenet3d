@@ -9,14 +9,13 @@ from utils.get_data import *
 from utils.train_utils import *
 from utils.spatial_transforms import *
 from utils.temporal_transforms import *
-from utils.train import train_epoch, val_epoch, test, evaluate_model
+# from utils.train import train_epoch, val_epoch, test, evaluate_model
 from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
 if __name__ == "__main__":
 
     # start time
-    import pdb; pdb.set_trace()
     start =  datetime.now()
 
     print(torch.cuda.is_available())
@@ -78,28 +77,14 @@ if __name__ == "__main__":
             os.path.join(Config.result_path, 'train_batch.log'),
             ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
 
-        dampening = Config.dampening
+        # Set optimizer algorithm
 
-        if Config.nesterov:
-            dampening = 0
-        else:
-            dampening = Config.dampening
-
-        # TODO: create optmizer function to set on the fly a selected optmizer
-
-        optimizer = optim.SGD(
-            model.parameters(),
-            lr=Config.learning_rate,
-            momentum=Config.momentum,
-            dampening=dampening,
-            weight_decay=Config.weight_decay,
-            nesterov=Config.nesterov)
+        optimizer = set_optimizer(model)
 
         scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', 
             patience=Config.lr_patience)
 
     # If set validation set. Apply spatial transformations. 
-
     if Config.validation:
         spatial_transform = Compose([
             Scale(Config.sample_size),
