@@ -17,7 +17,7 @@ from utils.get_data import get_test_set, get_validation_set
 
 def train_epoch(epoch, data_loader, model, criterion, optimizer,
                 epoch_logger, batch_logger):
-    print('train at epoch {}'.format(epoch))
+    print('Training at epoch {}/{}'.format(epoch, Config.n_epochs))
 
     model.train()
 

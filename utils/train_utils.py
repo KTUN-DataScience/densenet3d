@@ -91,7 +91,7 @@ def set_optimizer(model):
     --------
     torch.optim.Optimizer
     """
-    assert(Config.optimizer =='SGD' or Config.optimizer == 'Adam')
+    assert(Config.optimizer == 'SGD' or Config.optimizer == 'Adam')
 
     if Config.optimizer == 'SGD':
         if Config.nesterov:

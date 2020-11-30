@@ -9,7 +9,7 @@ from utils.get_data import *
 from utils.train_utils import *
 from utils.spatial_transforms import *
 from utils.temporal_transforms import *
-# from utils.train import train_epoch, val_epoch, test, evaluate_model
+from utils.train import train_epoch, val_epoch, test, evaluate_model
 from utils.target_transforms import ClassLabel, VideoID
 from utils.target_transforms import Compose as TargetCompose
 
@@ -60,7 +60,6 @@ if __name__ == "__main__":
         temporal_transform = TemporalRandomCrop(Config.sample_duration, Config.downsample)
         target_transform = ClassLabel()
         training_data = get_training_set(spatial_transform,temporal_transform,target_transform)
-        import pdb; pdb.set_trace()
 
         train_loader = torch.utils.data.DataLoader(
                 training_data,
@@ -80,7 +79,6 @@ if __name__ == "__main__":
         # Set optimizer algorithm
 
         optimizer = set_optimizer(model)
-
         scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', 
             patience=Config.lr_patience)
 

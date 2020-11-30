@@ -134,7 +134,10 @@ class DenseNet(nn.Module):
                 m.bias.data.zero_()
 
         # Linear layer
-        self.classifier = nn.Linear(num_features, num_classes)
+        if Config.classifier == 'Softmax' or Config.classifier == 'LogSoftmax':
+            self.classifier = nn.LogSoftmax()
+        else:
+            self.classifier = nn.Linear(num_features, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
