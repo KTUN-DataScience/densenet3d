@@ -14,6 +14,7 @@ dataset/jester/*
 
 #ignore config.py
 config.py
+paths.py
 
 #ignore results
 results/*

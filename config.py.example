@@ -1,49 +1,59 @@
+from paths import Path
+
 class Config:
     """
     Model training Configuration class
+    -----
+
     Attributes:
-        arch: Name of architecture being used
-        learning_rate (float) - how many filters to add each layer (k in paper)
-        n_epoch (int) - how many layers in each pooling block
-        lr_patience:
-        momentum:
-        begin_epoch:
-        n_epochs:
-        lr_steps:
-        weight_decay:
-        nesterov:
-        dataset:
-        model:
-        width_mult:
-        batch_size:
-        n_threads:
-        dampening:
-        modality:
-        sample_duration:
-        sample_size:
-        n_val_samples:
-        downsample:
-        optimiser:
-        cuda:
-        dataset_path:
-        annotation_path:
-        result_path:
-        n_classes:
-        initial_scale:
-        n_scales:
-        scale_step:
-        norm_value:
-        mean_dataset:
-        mean_norm:
-        std_norm: 
+
+    - arch: Name of architecture being used
+    - learning_rate (float) - how many filters to add each layer (k in paper)
+    - n_epoch (int) - how many layers in each pooling block
+    - lr_patience:
+    - momentum:
+    - begin_epoch:
+    - n_epochs:
+    - lr_steps:
+    - weight_decay:
+    - nesterov:
+    - dataset:
+    - model:
+    - width_mult:
+    - batch_size:
+    - n_threads:
+    -  dampening:
+    - modality:
+    - sample_duration:
+    - sample_size:
+    - n_val_samples:
+    - downsample:
+    - optimiser:
+    - cuda:
+    - dataset_path:
+    - annotation_path:
+    - result_path:
+    - n_classes:
+    - initial_scale:
+    - n_scales:
+    - scale_step:
+    - norm_value:
+    - mean_dataset:
+    - mean_norm:
+    - std_norm: 
+
     Usage:
+    ------
+
         from config import Config
-        Config.learning_rate
+        ``Config.learning_rate``
     """
 
     arch = 'Densenet'
 
-    learning_rate = 0.01
+    arch_type = 161
+
+    learning_rate = 0.1
 
     lr_patience = 10
 
@@ -51,15 +61,15 @@ class Config:
 
     begin_epoch = 1
 
-    n_epochs = 2
+    n_epochs = 100
 
-    n_classes = 5
+    n_classes = 27
 
-    lr_steps = [40, 55, 65, 70, 200, 250]
+    lr_steps = [25, 40, 55, 70] # (lr_rate * (0.1 ** step_position ))  =>  (0.1 (0.1 ** 1))
 
     weight_decay = 1e-3
 
-    nesterov = True
+    nesterov = False
 
     dataset = 'jester'
 
@@ -67,21 +77,23 @@ class Config:
 
     activation = 'relu' # options: 'relu' or 'leaky_relu'
 
-    classifier = 'Softmax' # options: 'Softmax' or 'Linear'
+    classifier = 'Linear' # options: 'Softmax' or 'Linear'
 
-    negative_slope = 0.01
+    negative_slope = 0.1
     
     train = True
 
     validation = True
 
-    test = True
+    test = False
 
-    width_mult = 1.0
+    seed = 1000
+
+    width_mult = 1
 
     batch_size = 16
 
-    n_threads = 4
+    n_threads = 16
 
     dampening = 0.9
 
@@ -91,9 +103,9 @@ class Config:
 
     sample_size = 112
 
-    n_val_samples = 3
+    n_val_samples = 1
 
-    downsample = 1
+    downsample = 2
 
     optimizer = 'SGD' # options: 'Adam' or 'SGD'
 
@@ -105,11 +117,11 @@ class Config:
 
     cuda = True
 
-    dataset_path = 'dataset/jester'
+    dataset_path = Path.dataset_path
 
-    annotation_path = 'dataset/annotation/jester.json'
+    annotation_path = Path.annotation_path
 
-    result_path = '\\results'
+    result_path = Path.result_path
 
     resume_path = ''
 
@@ -121,7 +133,7 @@ class Config:
 
     norm_value = 255
 
-    mean_dataset = 'kinetics'
+    mean_dataset = 'activitynet'
 
     dataset = ''
 
@@ -141,34 +153,4 @@ class Config:
 
     crop_position_in_test = 'c'
     
-    labels_to_use = {
-        'labels': [
-            # "Doing_other_things",
-            # "Drumming_Fingers",
-            # "No_gesture",
-            # "Pulling_Hand_In",
-            # "Pulling_Two_Fingers_In",
-            "Pushing_Hand_Away",
-            "Pushing_Two_Fingers_Away",
-            "Rolling_Hand_Backward",
-            "Rolling_Hand_Forward",
-            "Shaking_Hand",
-            # "Sliding_Two_Fingers_Down",
-            # "Sliding_Two_Fingers_Left",
-            # "Sliding_Two_Fingers_Right",
-            # "Sliding_Two_Fingers_Up",
-            # "Stop_Sign",
-            # "Swiping_Down",
-            # "Swiping_Left",
-            # "Swiping_Right",
-            # "Swiping_Up",
-            # "Thumb_Down",
-            # "Thumb_Up",
-            # "Turning_Hand_Clockwise",
-            # "Turning_Hand_Counterclockwise",
-            # "Zooming_In_With_Full_Hand",
-            # "Zooming_In_With_Two_Fingers",
-            # "Zooming_Out_With_Full_Hand",
-            # "Zooming_Out_With_Two_Fingers"
-        ]
-    }
+   

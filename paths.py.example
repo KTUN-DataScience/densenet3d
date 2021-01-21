@@ -1,0 +1,18 @@
+class Path:
+    """
+    Project constant path class
+    -----
+    Attributes:
+
+    - dataset_path (str): Path to dataset 
+
+    - annotation_path (str): Path to dataset annotation {validation and training list labels}
+
+    - result_path (str): Store model results and weights to be dumped in this folder
+    """
+    
+    dataset_path = 'dataset/jester'
+
+    annotation_path = 'dataset/annotation/jester.json'
+
+    result_path = 'results'
