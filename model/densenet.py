@@ -89,7 +89,7 @@ class DenseNet(nn.Module):
                  bn_size=4,
                  drop_rate=0,
                  num_classes=1000):
-
+    
         super().__init__()
 
         # First convolution
@@ -162,9 +162,23 @@ class DenseNet(nn.Module):
 
 
 def getModel(**kwargs):
-    return DenseNet(num_init_features=64,
+    if Config.arch_type==121:
+        return DenseNet(num_init_features=64,
                          growth_rate=32,
                          block_config=(6, 12, 24, 16), **kwargs)
+    elif Config.arch_type==161:
+        return DenseNet(num_init_features=96,
+                         growth_rate=48,
+                         block_config=(6, 12, 36, 24), **kwargs)
+    elif Config.arch_type==169:
+        return DenseNet(num_init_features=64,
+                         growth_rate=32,
+                         block_config=(6, 12, 32, 32), **kwargs)
+    elif Config.arch_type==201:
+        return DenseNet(num_init_features=64,
+                         growth_rate=32,
+                         block_config=(6, 12, 48, 32), **kwargs)
+
 
 def set_activation():
     assert(Config.activation =='leaky_relu' or Config.activation == 'relu')

@@ -66,7 +66,7 @@ python utils/n_frames_jester.py dataset_folder
 | ------------- |:-------------:| :-----|
 | `arch`     | Densenet | Name of the architecture of the model |
 | `learning_rate`      | 0.01      | Set learning rate for the model |
-#### Note: *This table will be update later*
+#### Note: *This table will be updated later*
  
 **Example**:
 ```python

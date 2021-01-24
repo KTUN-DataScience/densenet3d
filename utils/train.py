@@ -96,6 +96,8 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer,
     #    torch.save(states, save_file_path)
 
 
+# TODO: Try using CTross validation.
+
 def val_epoch(epoch, data_loader, model, criterion, logger):
     print('validation at epoch {}'.format(epoch))
 
