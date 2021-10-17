@@ -137,7 +137,7 @@ def get_std(norm_value=255):
     ]
 
 class Logger(object):
-
+    
     def __init__(self, path, header):
         self.log_file = open(path, 'w')
         self.logger = csv.writer(self.log_file, delimiter='\t')
